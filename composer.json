@@ -4,6 +4,7 @@
     "description": "Connect to MySQL database using PDO",
     "keywords": ["mysql", "data", "mncedi", "PDO"],
     "homepage": "http://mncedigital.co.za",
+    "license": "MIT",
     "authors": [
         {
             "name": "mncedim",
