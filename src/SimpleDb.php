@@ -472,7 +472,7 @@ class SimpleDb {
             case 'RLIKE':
             case 'NOT RLIKE':
                 //convert table.column to table_column as parameter name
-                $query = sprintf('%s %s :%s', $column, $condition, ($identifier . str_replace('.', '_', $column)));
+                $query = sprintf('%s %s :%s', $column, $condition, $this->_uniqueColumnName($identifier, $column));
                 break;
 
             case 'IN':
@@ -627,7 +627,7 @@ class SimpleDb {
             );
         }
 
-        return array_shift($this->_helperIdentifiers) . '__';
+        return array_shift($this->_helperIdentifiers);
     }
 
     /**
@@ -650,7 +650,7 @@ class SimpleDb {
                     . " $this->_helperTable SET ";
 
                 foreach ($this->_helperUpdate as $column => $newValue) {
-                    $columnPlaceholder = $identifier . str_replace('.', '_', $column);
+                    $columnPlaceholder = $this->_uniqueColumnName($identifier, $column);
                     $query .= "$column = :{$columnPlaceholder}, ";
                     $binds[] = array('column' => $columnPlaceholder, 'value' => $newValue);
                 }
@@ -689,7 +689,7 @@ class SimpleDb {
 
                 $binds[] = array(
                     //convert table.column to table_column as parameter name
-                    'column' => $identifier . str_replace('.', '_', $c['column']),
+                    'column' => $this->_uniqueColumnName($identifier, $c['column']),
                     'value' => $response['value'] //$c['value']
                 );
             }
@@ -870,5 +870,25 @@ class SimpleDb {
         }
 
         return $sql;
+    }
+
+    /**
+     * @param $identifier
+     * @param $column
+     * @return string
+     */
+    private function _uniqueColumnName($identifier, $column)
+    {
+        return $identifier . '_' . $this->_stripNonAlpha($column);
+    }
+    /**
+     * Remove non alphanumeric chars from string
+     *
+     * @param $string
+     * @return string
+     */
+    private function _stripNonAlpha($string)
+    {
+        return trim(preg_replace('/[^a-zA-Z0-9]+/', '_', $string), '_');
     }
 } 
