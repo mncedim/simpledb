@@ -846,11 +846,12 @@ class SimpleDb {
      * Helper method for writing your queries
      *
      * @param int $limit
+     * @param int $offset
      * @return $this
      */
-    public function limit($limit)
+    public function limit($limit, $offset = -1)
     {
-        $this->_helperLimit = $limit;
+        $this->_helperLimit = ($offset < 0 ? $limit : "$limit OFFSET $offset");
         return $this;
     }
 
