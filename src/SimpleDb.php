@@ -589,7 +589,7 @@ class SimpleDb {
             }
         }
 
-        if (is_int($this->_helperLimit)) {
+        if (!is_null($this->_helperLimit)) {
             $query .= " LIMIT {$this->_helperLimit} ";
         }
 
