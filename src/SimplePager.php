@@ -148,21 +148,17 @@ class SimplePager
         );
 
         //get data and total records from db
+        $offset = ( $this->currentPage - 1 ) * $this->pageSize;
+
         if ($this->rawQuery) {
 
+            $query = "{$this->rawQuery} LIMIT $offset, $this->pageSize";
             $this->rowCount = $this->db->execute()->rowCount();
-            $this->data = $this->query(
-                $this->rawQuery . ' LIMIT ' . ( ( $this->currentPage - 1 ) * $this->pageSize ) . ", $this->pageSize"
-            )->execute()->getResultSet($dataFormat, $pdoArgs);
-
+            $this->data = $this->query($query)->execute()->getResultSet($dataFormat, $pdoArgs);
         } else {
 
             $query  = $this->db->getGeneratedQuery(false);
-            $offset = ( $this->currentPage - 1 ) * $this->pageSize;
-
-            $this->data = $this->db->limit($this->pageSize, $offset)->execute()
-                ->getResultSet($dataFormat, $pdoArgs);
-
+            $this->data = $this->db->limit($this->pageSize, $offset)->execute()->getResultSet($dataFormat, $pdoArgs);
             $this->rowCount = $this->db->query($query)->execute()->rowCount();
         }
 
@@ -176,6 +172,7 @@ class SimplePager
             $pager['head'] = 1;
         }
 
+        //pages in-between
         for ( $page = $start; $page <= $end; $page++ ) {
             $pager['activePage'] = ( $this->currentPage == $page  ? $page : $pager['activePage'] );
             $pager['pages'][] = $page;
