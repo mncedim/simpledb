@@ -595,7 +595,15 @@ class SimpleDb {
 
         //return the raw query if requested so
         if ($returnQuery) {
-            return $query;
+            $runnableQuery = $query;
+            foreach ($binds as $bind) {
+                $runnableQuery = str_replace(
+                    ":{$bind['column']}",
+                    (is_numeric($bind['value']) ? $bind['value'] : "'".addslashes($bind['value'])."'") ,
+                    $runnableQuery
+                );
+            }
+            return $runnableQuery;
         }
 
         //query built and ready for action
@@ -880,16 +888,6 @@ class SimpleDb {
      */
     private function _uniqueColumnName($identifier, $column)
     {
-        return $identifier . '_' . $this->_stripNonAlpha($column);
-    }
-    /**
-     * Remove non alphanumeric chars from string
-     *
-     * @param $string
-     * @return string
-     */
-    private function _stripNonAlpha($string)
-    {
-        return trim(preg_replace('/[^a-zA-Z0-9]+/', '_', $string), '_');
+        return $identifier . '_' . md5($column);
     }
 } 
