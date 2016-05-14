@@ -38,15 +38,17 @@ class SimplePager
 
         if (!is_null($db)) {
             $this->setDb($db);
+            $this->table($table);
         }
     }
 
     /**
      * @param SimpleDb $db
+     * @return $this
      */
     public function setDb(SimpleDb &$db){
         $this->db = $db;
-        $this->table();
+        return $this;
     }
 
     /**
@@ -55,10 +57,10 @@ class SimplePager
      */
     public function table($name = null)
     {
-        if (!is_null($name)) {
-            $this->tableName = $name;
+        if ($this->db && !is_null($name)) {
+            $this->db->table($name);
         }
-        return $this->db->table($this->tableName);
+        return $this->db;
     }
 
     /**
