@@ -504,9 +504,9 @@ class SimpleDb {
 
             case 'IS':
             case 'IS NOT':
-                if ($value === true  || strtolower($value) === 'true' || (bool)$value == true) {
+                if ((strtolower($value) === 'true' || boolval($value) == true) && !is_null($value)) {
                     $value = 'true';
-                } else if ($value === false || strtolower($value) === 'false' || (bool)$value == false) {
+                } else if ((strtolower($value) === 'false' || boolval($value) == false) && !is_null($value)) {
                     $value = 'false';
                 } else {
                     $value = 'null';
