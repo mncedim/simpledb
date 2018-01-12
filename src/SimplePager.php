@@ -204,6 +204,9 @@ class SimplePager
         $pager['totalPages'] = $this->getTotalPages();
         $pager['totalRecords'] = $this->getTotalRecords();
 
+        // for twig
+        $pager['pager'] = &$this;
+
         $this->pager = (object)$pager;
 
         return $this->pager;
