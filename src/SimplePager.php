@@ -24,6 +24,11 @@ class SimplePager
     private $data;
 
     /**
+     * @var \stdClass
+     */
+    private $pager;
+
+    /**
      * @var SimpleDb
      */
     private $db;
@@ -199,7 +204,67 @@ class SimplePager
         $pager['totalPages'] = $this->getTotalPages();
         $pager['totalRecords'] = $this->getTotalRecords();
 
-        return (object) $pager;
+        $this->pager = (object)$pager;
+
+        return $this->pager;
+    }
+
+    /**
+     * @param string $firstPageLabel
+     * @param string $prevPageLabel
+     * @param string $nextPageLabel
+     * @param string $lastPageLabel
+     */
+    public function render(
+        $firstPageLabel = 'First Page',
+        $prevPageLabel = 'Prev',
+        $nextPageLabel = 'Next',
+        $lastPageLabel = 'Last Page'
+    )
+    {
+        if (!$this->pager) {
+            return;
+        }
+
+        // keep everything in the query string
+        $queryString = $_GET;
+
+        ?>
+        <ul>
+            <?php if (isset($this->pager->head)) : ?>
+                <li><a href="<?php echo $this->pagingUrl($queryString, $this->pager->head); ?>"><?php echo $firstPageLabel; ?></a></li>
+            <?php endif ?>
+
+            <?php if (isset($this->pager->previous)) : ?>
+                <li><a href="<?php echo $this->pagingUrl($queryString, $this->pager->previous) ?>"><?php echo $prevPageLabel; ?></a></li>
+            <?php endif ?>
+
+            <?php foreach($this->pager->pages as $page) :?>
+                <li <?php if ($page == $this->pager->activePage) : ?>class="active"<?php endif ?>>
+                    <a href="<?php echo $this->pagingUrl($queryString, $page) ?>"><?php echo $page ?></a>
+                </li>
+            <?php endforeach ?>
+
+            <?php if (isset($this->pager->next)) : ?>
+                <li><a href="<?php echo $this->pagingUrl($queryString, $this->pager->next) ?>"><?php echo $nextPageLabel; ?></a></li>
+            <?php endif ?>
+
+            <?php if (isset($this->pager->tail)) : ?>
+                <li><a href="<?php echo $this->pagingUrl($queryString, $this->pager->tail) ?>"><?php echo $lastPageLabel; ?></a></li>
+            <?php endif ?>
+        </ul>
+        <?php
+    }
+
+    /**
+     * @param $get
+     * @param $page
+     * @return string
+     */
+    private function pagingUrl($get, $page)
+    {
+        $get['page'] = $page;
+        return '?'.http_build_query($get);
     }
 
     /**
