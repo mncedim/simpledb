@@ -51,30 +51,32 @@ $response = $pager
 </table>
 
 <!--build paging view-->
-<ul>
-    <?php if (isset($response->head)) : ?>
-        <li><a href="?page=<?php echo $response->head ?>">First Page</a></li>
-    <?php endif ?>
-    <?php if (isset($response->previous)) : ?>
-        <li><a href="?page=<?php echo $response->previous ?>">Prev</a></li>
-    <?php endif ?>
-    <?php foreach($response->pages as $page) :?>
-        <li>
-            <?php if ($page == $response->activePage) : ?>
-                <span><?php echo $page ?></span>
-            <?php else : ?>
-                <a href="?page=<?php echo $page ?>"><?php echo $page ?></a>
-            <?php endif ?>
-        </li>
-    <?php endforeach ?>
-    <?php if (isset($response->next)) : ?>
-        <li><a href="?page=<?php echo $response->next ?>">Next</a></li>
-    <?php endif ?>
-    <?php if (isset($response->tail)) : ?>
-        <li><a href="?page=<?php echo $response->tail ?>">Last Page</a></li>
-    <?php endif ?>
-</ul>
+<!--<ul>-->
+<!--    --><?php //if (isset($response->head)) : ?>
+<!--        <li><a href="?page=--><?php //echo $response->head ?><!--">First Page</a></li>-->
+<!--    --><?php //endif ?>
+<!--    --><?php //if (isset($response->previous)) : ?>
+<!--        <li><a href="?page=--><?php //echo $response->previous ?><!--">Prev</a></li>-->
+<!--    --><?php //endif ?>
+<!--    --><?php //foreach($response->pages as $page) :?>
+<!--        <li>-->
+<!--            --><?php //if ($page == $response->activePage) : ?>
+<!--                <span>--><?php //echo $page ?><!--</span>-->
+<!--            --><?php //else : ?>
+<!--                <a href="?page=--><?php //echo $page ?><!--">--><?php //echo $page ?><!--</a>-->
+<!--            --><?php //endif ?>
+<!--        </li>-->
+<!--    --><?php //endforeach ?>
+<!--    --><?php //if (isset($response->next)) : ?>
+<!--        <li><a href="?page=--><?php //echo $response->next ?><!--">Next</a></li>-->
+<!--    --><?php //endif ?>
+<!--    --><?php //if (isset($response->tail)) : ?>
+<!--        <li><a href="?page=--><?php //echo $response->tail ?><!--">Last Page</a></li>-->
+<!--    --><?php //endif ?>
+<!--</ul>-->
 <?php
+
+$response->pager->render();
 
 //echo '<pre>';
 //print_r($response);
