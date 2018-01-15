@@ -233,7 +233,7 @@ class SimplePager
         $queryString = $_GET;
 
         ?>
-        <ul>
+        <ul class="pagination">
             <?php if (isset($this->pager->head)) : ?>
                 <li><a href="<?php echo $this->pagingUrl($queryString, $this->pager->head); ?>"><?php echo $firstPageLabel; ?></a></li>
             <?php endif ?>
